@@ -1,0 +1,52 @@
+---
+title: 'Workflow 2: Amazon Bedrock 모델 관리'
+---
+
+> **Amazon Bedrock 모델 관리하기**
+> 생성 AI 모델로 작업할 때는 내가 사용할 사례에 적합한 **파운데이션 모델**을 선택할 수 있어야 합니다.
+> Amazon Bedrock의 경우, 계정에 Claude Instant 모델을 추가하면 고급 자연어 처리 기능을 활용해서 **My Affirmation app**의 확언을 생성할 수 있어요.
+> AWS 콘솔에서 사용하고 싶은 모델을 추가하면 API 메서드를 호출하고, 커스터마이징된 AI 생성 응답을 얻을 수 있습니다.
+>
+> **Claude** 모델은 **Anthropic**에서 개발한 강력한 언어 모델로, 방대한 데이터로 학습되어 뛰어난 유창성과 일관성을 갖춘 텍스트 생성 능력을 가지고 있습니다.
+
+이 워크플로우는 AWS Console을 통해 계정에서 한 번만 수행해야 하는 작업입니다. 현재 이 실습에서는 임시 AWS 계정을 사용하고 있으므로 특정 모델에 대한 접근 권한을 직접 요청해야 합니다.
+
+## 설정 절차
+
+1. VS Code Server 링크가 있는 **Workshop Studio 이벤트 대시보드**의 왼쪽 사이드바에서 **AWS 계정 액세스** 섹션으로 이동합니다.
+2. **Open AWS Console**을 선택합니다. 대괄호 안의 지역은 이벤트가 호스팅되는 지역을 나타내며, 스크린샷과 다를 수 있습니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/010-open-console.png" width="30%"/>
+3. AWS Console이 열립니다.
+4. 로그인된 사용자가 **WSParticipantRole/Participant**인지 확인합니다. 만약 다른 이름으로 표시되면, 다른 계정으로 로그인된 상태일 수 있으므로 강사에게 알려주세요.
+5. 스크린샷에 표시된 지역은 **아일랜드 (eu-west-1)**입니다. 호스팅 지역에 따라 다를 수 있습니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/020-select-region.png"/>
+6. 드롭다운 메뉴에서 **미국 서부 (오리건) us-west-2**를 선택합니다. Amazon Bedrock은 이 지역에서만 접근할 수 있으므로 반드시 이 지역을 선택해야 합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/030-us-west-2.png" width="50%"/>
+7. **검색창**에 "bedrock"을 입력합니다.
+8. 검색 결과에서 **Amazon Bedrock**을 선택합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/040-bedrock-search.png"/>
+9. **Amazon Bedrock** 시작 페이지에서 **Get started**를 클릭합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/050-try-bedrock.png" width="50%"/>
+10. Amazon Bedrock 페이지를 처음 방문할 경우 **Welcome to Amazon Bedrock!** 대화 상자가 나타납니다.
+11. **Manage Model Access**를 선택합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/060-manage-model-access.png" width="70%"/>
+12. **Enable specific models**를 선택합니다.
+    > 주의사항 - **Enable all models**을 선택하지 마세요. 특정 모델만 접근 권한이 있으며, 잘못 선택하면 권한 오류가 발생할 수 있어요.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/070-enable-specific-models.png" width="60%"/>
+13. 모델 목록에서 **Claude**를 찾고,
+14. 선택합니다. (Claude만 선택해야 합니다)
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/080-select-claude.png" width="60%"/>
+15. **Next**를 클릭합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/090-select-next.png"/>
+16. **Review and submit** 페이지에서 **Claude**만 선택되었는지 확인합니다. 잘못 선택되었다면 **Previous**로 돌아가서 수정하세요.
+17. **Submit**을 클릭합니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/100-review-and-submit.png"/>
+18. **Model access update submitted** 메시지가 나타나면 계정 업데이트가 완료될 때까지 잠시 기다립니다.
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-2/110-success.png"/>
+19. AWS Console을 닫고, Workshop Studio 이벤트 페이지로 돌아갑니다.
+
+## 워크플로우 완료
+
+> 이 워크플로우에서는 AWS Console에 로그인하여 us-west-2 지역에 **Claude** 모델을 활성화했습니다.
+
+두 번째 워크플로우를 완료했습니다! 다음 워크플로우에서는 Generative AI를 사용하여 무한한 긍정 문구를 생성할 수 있는 기능을 추가할 예정입니다.

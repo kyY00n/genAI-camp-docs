@@ -1,0 +1,79 @@
+---
+title: 'Workflow 1: 기존 확언 생성 애플리케이션 살펴보기'
+---
+
+<anchor>
+    **축하합니다!** 여러분은 My Affirmations app(긍정 확언 앱) 을 개발하는 회사에 새로운 소프트웨어 엔지니어로 채용됐어요.
+
+    Affirmation(긍정 확언)이란 본인을 격려하고 고양시키려는 의도로 스스로에게 말하거나 마음속으로 반복하는 긍정적인 문장을 이야기해요.
+    삶에서 믿거나 실현하고 싶은 것을 긍정하거나 주장하는 방법입니다.
+
+    My Affirmations app 은 사용자들에게 동기부여를 하고, 영감을 주기 위해 확언 문장을 보여줍니다.
+    현재는 그런 문장을 선택하는 기능에 한계가 있습니다.
+
+    같은 팀의 시니어 엔지니어가 말하길 회사에서는 이 My Affirmations app을 개선하기를 원한다고 알려줬어요.
+    생성형 AI (generative AI)를 활용해서 끊임없이 새로운 확언 문장을 생성하는 애플리케이션으로 만들어야해요.
+    이 작업을 위해 시니어 엔지니어가 여러분에게 AWS 콘솔과 계정에 권한을 줬다고 합니다.
+
+    자, 이번 단계에서 여러분이 할 일은 기존에 동작하고 있는 My Affirmations app 을 설치하고 실행해보는 것입니다!
+</anchor>
+
+## My Affirmations App 폴더와 파일 탐색하기
+
+> **Notes**
+> 이 단계에서는 AWS가 EC2 인스턴스에서 호스팅하는 Visual Studio Code Server를 사용한다고 가정합니다.
+> 프로젝트 파일이 있는 리포지토리가 이미 복제되어 있으므로 직접 복제할 필요가 없습니다.
+
+1. Visual Studio Code Server 창에서 Activity Bar에서 탐색기를 선택해 Primary Side Bar를 파일 보기로 전환합니다.
+
+2. 이 앱에는 4개의 주요 파일이 있습니다:
+- package.json
+- index.html
+- main.js
+- style.css
+
+3. Primary Side Bar에서 각 파일을 선택해 열어봅시다:
+- **package.json**: Node.js가 프로젝트의 의존성과 메타데이터를 관리하는 데 사용하는 파일입니다. 프로젝트의 이름, 버전, 설명, 작성자, 스크립트, 그리고 의존성 목록(프로젝트에 필요한 패키지와 그 버전)이 포함되어 있습니다. 프로젝트의 의존성을 설치하고 관리하는 데 필수적인 파일입니다.
+- **index.html**: 웹 애플리케이션 또는 웹사이트의 진입점 역할을 하는 주요 HTML 파일입니다. 일반적으로 HTML 구조를 포함하며, 메타데이터를 위한 섹션과 사용자에게 보이는 콘텐츠 섹션을 갖추고 있습니다. 이 파일은 웹 브라우저에 의해 로드되어 웹 페이지를 화면에 표시합니다.
+- **main.js**: 애플리케이션 또는 웹사이트의 주요 로직과 기능을 포함한 JavaScript 파일입니다. JavaScript 코드의 진입점 역할을 하며, 이벤트 처리, DOM(Document Object Model) 조작, API 호출, 전체적인 동작 관리를 담당합니다.
+- **style.css**: 웹 애플리케이션 또는 웹사이트의 시각적 스타일과 레이아웃을 정의하는 CSS(Cascading Style Sheets) 규칙을 담고 있는 파일입니다. HTML 요소의 색상, 글꼴, 간격, 레이아웃 등을 제어하며, 웹사이트나 애플리케이션의 전반적인 외관을 결정합니다.
+
+## 앱 설치 및 실행
+
+1. **터미널**을 열어 의존성을 설치합니다. **Panel**이 닫혀 있다면, **View > Terminal**을 선택하세요.
+2. 터미널에서 `npm install` 명령어를 실행합니다.
+    ```bash
+    npm install
+    ```
+    <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-1/npm-install.png"/>
+3. 설치가 완료되면 앱을 실행하기 위해 `npm run dev` 명령어를 입력하세요. 팝업 메시지가 뜨면 브라우저에서 앱을 열거나, 터미널에 표시된 네트워크 URL을 선택하세요.
+    ```bash
+    npm run dev
+    ```
+4. 앱이 정상적으로 로드되고 버튼을 클릭할 수 있는지 확인합니다.
+
+## 앱 사용하기
+
+현재 앱은 매우 간단하여 랜덤한 긍정 문구를 보여줍니다. **Another Please** 버튼을 클릭하면 새로운 문구가 랜덤으로 표시되지만, 문구가 많지 않아 곧 모두 보게 될 것입니다.
+
+다음 워크플로우에서 Generative AI를 추가하여 새로운 문구를 생성할 예정입니다.
+
+## 앱 파일 구조 확인하기
+
+**main.js** 파일을 열어 내용을 확인해 봅시다:
+   - **CSS Import**: 첫 번째 줄에서 `import './style.css'`로 스타일링을 위한 CSS 파일을 불러옵니다.
+   - **Affirmations Array**: 한정된 긍정 문구 리스트가 포함된 배열이 정의됩니다.
+   - **유틸리티 함수**:
+- `fetchNewAffirmation()`: 랜덤 문구를 가져와 화면에 표시하는 함수.
+- `showLoadingAnimation()`: 로딩 애니메이션을 표시하는 함수. `#affirmation` ID를 가진 요소의 HTML 내용을 `loading-spinner` 클래스를 가진 `div`로 설정합니다.
+- `disableButton(isDisabled)`: `isDisabled` 파라미터에 따라 `#getNewAffirmation` 버튼을 비활성화하거나 활성화합니다. 새로운 문구를 가져오는 동안 여러 요청이 발생하지 않도록 사용됩니다.
+   - **초기화 함수**: **init()** 함수는 페이지가 로드되거나 새로고침될 때 호출되며, 다음 작업을 수행합니다:
+- **fetchNewAffirmation()** 함수를 호출하여 새로운 문구를 가져옵니다.
+- `#getNewAffirmation` 버튼을 선택하여 클릭 이벤트 리스너를 추가하고, 클릭 시 **fetchNewAffirmation()** 함수를 호출합니다.
+   - **페이지 로드 시**: 페이지가 로드되거나 새로고침될 때 **init()** 함수가 호출됩니다.
+   - **초기 문구 설정**: **init()** 함수는 **fetchNewAffirmation()** 함수를 호출하여 랜덤 문구를 가져와 `#affirmation` 요소의 HTML 내용으로 설정합니다.
+   - **버튼 클릭 이벤트**: **init()** 함수는 `#getNewAffirmation` 버튼에 클릭 이벤트 리스너를 추가하여, 버튼 클릭 시 **fetchNewAffirmation()** 함수가 실행되도록 합니다.
+
+## 워크플로우 요약
+
+이 코드로 인해 사용자는 버튼을 클릭하여 새로운 랜덤 문구를 가져올 수 있으며, 새로운 문구가 로드되는 동안 로딩 애니메이션이 표시되어 사용자 경험이 개선됩니다.

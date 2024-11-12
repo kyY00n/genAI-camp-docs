@@ -1,0 +1,85 @@
+---
+title: 'Workflow 4: Amazon Bedrock 모델 전환'
+---
+
+> Workflow 1에서는 My Affirmations 앱을 테스트했지만, 이 앱은 확언 종류가 제한적입니다.
+> Workflow 2에서는 Claude Instant 모델을 AWS 계정에 추가했습니다.
+> Workflow 3에서는 생성형 AI를 사용해 새롭게 생성된 확언을 앱에 표시하도록 코드를 업데이트했습니다.
+
+새로운 기능을 시니어 개발자에게 시연했으며, 그녀는 진행 상황에 만족해했습니다. 그녀는 최근 회사가 **Claude 3 Haiku** 모델을 평가하기로 결정했으며, 이를 계정에 추가하고 코드에서도 이를 사용하도록 변경해달라고 요청했습니다.
+
+이 워크플로에서는 3단계를 완료해야 합니다:
+
+1. AWS Bedrock 모델 액세스를 업데이트하여 Claude Haiku를 포함합니다.
+2. `main.js` 파일의 코드를 수정하여 새 모델을 사용합니다.
+3. 새 코드를 실행하여 새 확언이 생성되는지 확인합니다.
+
+> **경고**: 이 워크플로에 바로 넘어오고 Workflow 1, 2, 3을 완료하지 않았다면 앱이 제대로 작동하지 않습니다.
+
+---
+
+## Amazon Bedrock 모델에 Claude 3 Haiku 추가하기
+
+이 단계는 Workflow 2와 동일하지만, **Claude** 대신 **Claude 3 Haiku**를 선택합니다.
+아래는 텍스트로만 제공된 단계이므로, 필요 시 Workflow 2의 스크린샷을 참조하며 **Claude Haiku**를 선택하세요.
+
+> **정보**: **Claude 3** 모델군은 **Anthropic**에서 개발했으며, 2024년 3월에 출시되었습니다.
+
+1. Workshop Studio 이벤트 대시보드에서 **AWS 계정 액세스** 섹션으로 이동합니다.
+2. **AWS 콘솔 열기**를 선택합니다.
+3. 로그인된 콘솔 사용자가 **WSParticipantRole/Participant**인지 확인합니다.
+4. 지역 드롭다운 메뉴에서 **미국 서부 (오레곤) us-west-2**로 설정합니다.
+    - **중요**: Amazon Bedrock 서비스는 해당 리전에서만 액세스할 수 있습니다.
+5. **검색창**에 `bedrock`을 입력합니다.
+6. 검색 결과에서 **Amazon Bedrock**을 선택합니다.
+7. **Amazon Bedrock** 페이지에서 **Manage Model Access**를 선택합니다.
+8. **Enable specific models**를 선택하세요.
+    - **Enable all models**를 선택하지 마세요. 이 경우 여러 권한 오류가 발생할 수 있습니다.
+9. 모델 목록에서 **Claude 3 Haiku**를 찾습니다.
+10. **Claude 3 Haiku**를 선택합니다.
+11. **next**을 선택합니다.
+12. **Review and submit** 페이지에서 **Claude 3 Haiku**가 목록에 있는지 확인합니다.
+13. **Submit**을 선택합니다.
+14. **Model access update submitted** 메시지가 나타나면, 계정이 업데이트될 때까지 기다립니다.
+15. AWS 콘솔을 닫고 Workshop Studio 이벤트 페이지로 돌아갑니다.
+
+---
+
+## main.js에 Amazon Bedrock 모델 추가하기
+
+모델을 Amazon Bedrock 계정에 추가했으므로, 코드를 업데이트하여 이 모델을 사용해야 합니다.
+Claude 3 Haiku의 모델 ID는 `anthropic.claude-3-haiku-20240307-v1:0`입니다.
+```javascript
+import './style.css'
+import { BedrockRuntimeClient, ConverseCommand } from "@aws-sdk/client-bedrock-runtime";
+
+const modelId = 'anthropic.claude-v2'; // 여기
+const prompt = "Give me an affirmation to boost my motivation today, referencing plants, animals, or flowers by adding emoji. Don't show the prompt, only the quote. Do not add anything like Here is an affirmation... just return the affirmation alone";
+const conversation = [
+  {
+    role: "user",
+    content: [{ text: prompt }],
+  },
+];
+
+```
+
+> **성공**: Amazon Bedrock 모델 ID를 확인하려면 [Amazon Bedrock 모델 ID 문서](https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html)를 참조하세요.
+
+1. **Visual Studio Code Server**에서 **main.js** 파일을 엽니다.
+2. 모델을 지정하는 코드를 수정합니다
+    ```javascript
+    const modelId = 'anthropic.claude-3-haiku-20240307-v1:0';
+    ```
+
+## 결과 확인하기
+
+1. Visual Studio Code Server에서 터미널로 이동합니다.
+2. 앱을 시작하려면 터미널에서 `npm run dev`를 실행합니다.
+    ```bash
+    npm run dev
+    ```
+    이미 실행 중인 경우, (CTRL + C)로 중지한 후 다시 npm run dev를 실행합니다.
+3. 새 앱이 로드될 때 URL을 클릭하여 앱을 엽니다.
+4. 첫 페이지 로드 시 확언이 표시됩니다.
+5. Another Please를 선택하여 새로운 확언을 요청할 수 있습니다.
