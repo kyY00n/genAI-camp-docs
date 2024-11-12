@@ -11,19 +11,19 @@
     {
       "group": "Gen AI Lab 소개",
       "pages": [
-        "pages/init",
-        "pages/index"
+        "pages/introduction/readme",
+        "pages/introduction/genai_lab"
       ]
     },
     {
       "group": "Generative AI 웹 애플리케이션",
       "pages": [
-        "pages/setup",
-        "pages/workflow_1",
-        "pages/workflow_2",
-        "pages/workflow_3",
-        "pages/workflow_4",
-        "pages/summary"
+        "pages/lab/setup",
+        "pages/lab/workflow_1",
+        "pages/lab/workflow_2",
+        "pages/lab/workflow_3",
+        "pages/lab/workflow_4",
+        "pages/lab/summary"
       ]
     }
   ],
