@@ -1,8 +1,10 @@
 ---
 title: 'Workflow 3: Amazon Bedrock API 추가하기'
 ---
-> 1단계에서 My Affirmations 앱을 테스트했으나, 제한된 확언만을 포함하고 있었습니다.
-> 2단계에서는 Claude Instant 모델을 AWS 계정에 추가했습니다.
+<Note>
+    1단계에서 My Affirmations 앱을 테스트했으나, 제한된 확언만을 포함하고 있었습니다.
+    2단계에서는 Claude Instant 모델을 AWS 계정에 추가했습니다.
+</Note>
 
 이제 이 워크플로에서는 다음의 3단계를 수행해야 합니다:
 
@@ -10,7 +12,9 @@ title: 'Workflow 3: Amazon Bedrock API 추가하기'
 2. `main.js` 파일에 Amazon Bedrock API를 호출하는 코드를 추가합니다.
 3. 새로운 코드를 실행하여 새로운 확언이 생성되는지 확인합니다.
 
-> **경고:** 만약 1단계와 2단계를 완료하지 않고 이 단계로 바로 넘어왔다면, 앱이 제대로 작동하지 않을 것입니다.
+<Info>
+    만약 1단계와 2단계를 순서대로 실행하지 않았을 경우, 앱이 제대로 작동하지 않으니 반드시 순서를 지켜주세요.
+</Info>
 
 ---
 
@@ -19,10 +23,16 @@ title: 'Workflow 3: Amazon Bedrock API 추가하기'
 이 섹션에서는 앱이 AWS와 통신하여 Amazon Bedrock을 사용할 수 있도록 합니다.
 Workshop Studio 계정은 Amazon Bedrock 서비스에 접근할 수 있도록 인증을 제공하는 액세스 키와 비밀 키로 구성되어 있습니다.
 
-> **주의:** 이 앱은 VS Code 서버에서만 실행되며 **배포되지 않습니다**. 따라서 간단하게 접근하기 위해 IAM 사용자의 **액세스 키**와 **비밀 키** 환경 변수를 사용하고 있습니다. 하지만 이 방법은 실제 프로덕션 앱을 배포할 때는 적절하지 않으며, 이 실습에서는 Bedrock API에 집중하고 있으므로 이 간단한 접근 방식을 사용합니다.
+<Warning>
+    이 앱은 VS Code Server에서만 실행되고 배포되지 않으므로 IAM 사용자의 액세스 키 및 비밀 환경 변수를 사용하여 Amazon Bedrock에 안전하게 액세스합니다. 이 방법은 배포될 프로덕션 앱을 보호하는 방법은 아니지만, 이 실습에서는 Bedrock API를 사용하는 데 중점을 두었기 때문에 이 간단한 접근 방식을 사용합니다.
+
+    보안 및 모범 사례에 대해 자세히 알아보려면 실습이 끝난 후 아래 링크를 참조하세요.
+    1. [AWS Documentation: AWS Access Keys Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#securing_access-keys)
+    2. [AWS Documentation: AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html)
+</Warning>
 
 1. **Visual Studio Code Server**에서 **.env** 파일을 엽니다. 이 파일에는 Amazon Bedrock에 안전하게 접근할 수 있도록 환경 변수가 저장됩니다.
-    ```bash
+    ```bash .env
     VITE_AWS_DEFAULT_REGION=
     VITE_AWS_ACCESS_KEY_ID=
     VITE_AWS_SECRET_ACCESS_KEY=
@@ -38,7 +48,7 @@ Workshop Studio 계정은 Amazon Bedrock 서비스에 접근할 수 있도록 �
     <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-3/020-creds-copy.png"/>
 8. VS Code 창으로 돌아가 **.env** 파일에 기존 코드 아래에 복사한 환경 변수를 붙여넣습니다.
 9. **.env** 파일은 다음과 유사하게 보일 것입니다:
-    ```bash
+    ```bash .env
     VITE_AWS_DEFAULT_REGION=us-west-2
     VITE_AWS_ACCESS_KEY_ID=ABCDEFIGHIGJ
     VITE_AWS_SECRET_ACCESS_KEY=ABCDEFIGHIGJKLMNOPQRSTUVWXYZ
@@ -52,7 +62,7 @@ Workshop Studio 계정은 Amazon Bedrock 서비스에 접근할 수 있도록 �
     - 기존 코드를 모두 삭제하고, 아래의 코드를 복사하여 붙여넣습니다.
     - 파일을 저장합니다.
 
-    ```javascript
+    ```javascript main.js
     import './style.css'
     import { BedrockRuntimeClient, ConverseCommand } from "@aws-sdk/client-bedrock-runtime";
 
@@ -141,9 +151,15 @@ Workshop Studio 계정은 Amazon Bedrock 서비스에 접근할 수 있도록 �
 
 ## 새로운 코드를 실행하여 확인하기
 
+<Info>
+    Amazon Bedrock API 호출 시 오류가 발생하는 경우, 설정한 **AWS 자격 증명**과 **코드의 Bedrock 엔드포인트**가 정확한지 다시 확인하세요.
+</Info>
+
 1. **터미널**에서 `npm run dev`를 실행하여 앱을 시작합니다.
 2. 앱이 실행되면 브라우저에서 **My Affirmations 앱**을 새로 고칩니다.
 3. 새로 추가된 Amazon Bedrock API를 통해 생성된 새로운 확언이 표시되는지 확인합니다.
     <img src="https://static.us-east-1.prod.workshops.aws/public/9c001be7-fb66-435b-8814-c5cd9619a3b0/static/images/workflow-3/030-sample-site.gif" width="50%"/>
 
-> **참고:** Amazon Bedrock API 호출 시 오류가 발생할 경우, 설정한 **AWS 자격 증명**과 **코드의 Bedrock 엔드포인트**가 정확한지 다시 확인하세요.
+<Check>
+    **축하합니다!** 제한된 갯수의 문구 뿐 아니라 항상 새로운 긍정 확언을 생성하는 앱을 만들었습니다 :)
+</Check>

@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "ACC Korea GenAI Camp",
+  "name": "ACC Korea GenAI Labs",
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#09090b",
@@ -8,6 +8,13 @@
     "dark": "#09090b"
   },
   "navigation": [
+    {
+      "group": "Gen AI Lab 소개",
+      "pages": [
+        "pages/init",
+        "pages/index"
+      ]
+    },
     {
       "group": "Generative AI 웹 애플리케이션",
       "pages": [
